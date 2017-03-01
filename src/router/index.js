@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
+import Menu from '@/components/Menu'
 import Loadmore from '@/components/JSComponents/Loadmore'
 
 Vue.use(Router)
@@ -10,11 +10,11 @@ export default new Router({
     {
       path: '/',
       name: 'Hello',
-      component: Hello
+      component: Menu
     },
     {
-      path: '/loadmore',
-      name: 'Hello',
+      name: 'load-more',
+      path: '/load-more',
       component: Loadmore
     }
   ]
