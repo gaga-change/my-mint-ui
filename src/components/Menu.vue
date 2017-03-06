@@ -1,7 +1,13 @@
 <template>
   <div class="hello">
     <ul>
-      <router-link :to="{name:'load-more'}">下拉上拉</router-link>
+      <li>
+        <router-link :to="{name:'load-more'}">下拉上拉</router-link>
+      </li>
+      <br>
+      <li>
+        <router-link :to="{name:'infinite-scroll'}">滚动自动加载</router-link>
+      </li>
     </ul>
   </div>
 </template>
