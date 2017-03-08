@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div  ref="wrapper"  style="height: 200px;background-color: #5dc4a1"></div>
-    <div  :style="{ height: wrapperHeight + 'px' }">
+    <div ref="wrapper" style="height: 200px;background-color: #5dc4a1"></div>
+    <div :style="{ height: wrapperHeight + 'px' }">
       <mt-loadmore
         :top-method="loadTop"
         ref="loadmore"
@@ -39,19 +39,13 @@
       loadMore() {
         this.loading = true;
         const self = this;
-        setTimeout(function () {
-          if (self.list.length >= 50) {
-            console.log(" 结束");
+        self.updateBottom().then(function (noData) {
+          if (noData) {
             self.allLoaded = true;
-            return;
+          } else {
+            self.loading = false;
           }
-
-          let last = self.list[self.list.length - 1];
-          for (let i = 1; i <= 10; i++) {
-            self.list.push(last + i);
-          }
-          self.loading = false;
-        }, 500);
+        });
       },
       loadTop(){
         let self = this;
@@ -61,12 +55,39 @@
           }
           self.$refs.loadmore.onTopLoaded();
         }, 10);
+      },
+      updateBottom: function () {
+        const self = this;
+        return new Promise(function (resolve, reject) {
+          setTimeout(function () {
+            if (self.list.length >= 50) {
+              console.log(" 结束");
+              let noData = true;
+              resolve(noData);
+              return;
+            }
+            let last;
+            if (self.list.length == 0) {
+              last = 0;
+            } else {
+              last = self.list[self.list.length - 1];
+            }
+            console.log(last);
+            for (let i = 1; i <= 10; i++) {
+              self.list.push(last + i);
+            }
+            resolve();
+          }, 500000);
+        })
+      },
+      updateTop: function () {
+
       }
     },
     created(){
-      for (let i = 1; i <= 20; i++) {
-        this.list.push(i);
-      }
+//      for (let i = 1; i <= 20; i++) {
+//        this.list.push(i);
+//      }
     },
     mounted() {
       this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
@@ -74,6 +95,19 @@
   };
 </script>
 
+<style lang="scss" rel="stylesheet/scss">
+  .page-infinite-loading {
+    text-align: center;
+    height: 50px;
+    line-height: 50px;
+
+  }
+  .page-infinite-loading div {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+  }
+</style>
 <style scoped>
 
   ul {
@@ -90,4 +124,6 @@
   ul > li:nth-child(even) {
     background-color: #bbefa0;
   }
+
+
 </style>
